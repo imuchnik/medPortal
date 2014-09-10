@@ -1,0 +1,87 @@
+﻿@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "MTM Portal";
+}
+
+<!DOCTYPE html>
+<html lang="eng">
+    <head>
+        <title>MCA Portal</title>
+        @Scripts.Render("~/bundles/jquery-widgets")
+        @Scripts.Render("~/bundles/underscore")
+        @Scripts.Render("~/bundles/angular")
+        @Scripts.Render("~/bundles/angular-route")
+        @Scripts.Render("~/bundles/kendo-angular")
+        @Scripts.Render("~/bundles/portal-app")
+
+
+    </head>
+    <body data-ng-app="mtmPortal">
+        <div data-ng-controller="mainController">
+            <section class="container">
+                <div class="navbar nav-justified navbar-default navbar-fixed-top">
+                    <ul class="nav nav-pills">
+                        <li></li>
+
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" role="button" data-toggle="dropdown" data-target="#" >Manage</a>
+
+                            <ul class="dropdown-menu" role="menu">
+                                @if (User.IsInRole("Coordinator") || User.IsInRole("Admin"))
+                                {
+                                    <li data-ng-hide="@User.IsInRole("Provider")"><a href="#/triggers">Trigger Reports</a></li>
+                                }
+                                <li><a href="#/cases">Cases</a></li>
+@*                                <li><a href="#/newReportTemplate">Ad-hoc Trigger Reports</a></li>*@
+
+                            </ul>
+
+                        </li>
+                        <li><a href="#">Client</a></li>
+
+                        <li>
+                            <select class="show-tick form-control" data-ng-model="currentClient" data-ng-disabled="clientDisabled()"  data-ng-options="client.ClientName for client in clients">
+                                <option value=" ">Please select a client</option>
+                            </select>
+                        </li>
+                        <li class="pull-right dropdown">
+                            <a class="dropdown-toggle" role="button" data-toggle="dropdown" data-target="#">
+                                <i class="glyphicon glyphicon-user"></i><strong>@User.Identity.GetUserName()</strong>
+                            </a> 
+                          
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    @Html.ActionLink("Profile", "Manage", "Account", null, new {title = "Profile"})
+                                </li>
+                             
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li>
+                                        @Html.ActionLink("Manage", "Index", "Account", null, new {title = "Manage"})
+                                    </li>
+                                }
+                                <li class="hidden">
+                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                    }
+
+                                </li>
+                                <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                            </ul>
+                        
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            <section class="container">
+                <h3>{{currentClient.ClientName}}</h3>
+            </section>
+            <section>
+                <div data-ng-view></div>
+            </section>
+        </div>
+
+        <h3>@ViewData["CurrentUser"]</h3>
+    </body>
+</html>

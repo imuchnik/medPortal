@@ -1,0 +1,49 @@
+﻿@model IEnumerable<MedicationTherapyManagement.Models.Client>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>
+        Clients
+    </title>
+</head>
+<body>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Organization.OrganizationName)
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientName)
+                </td>
+                
+                <td>
+                    @Html.DisplayFor(modelItem => item.Organization.OrganizationName)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ClientId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ClientId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ClientId })
+                </td>
+            </tr>
+        }
+
+    </table>
+</body>
+</html>

@@ -1,0 +1,36 @@
+﻿
+<div data-ng-controller="customTriggerController">
+    <div class="col-md-12">
+        <h1>Ad-hoc reporting</h1>
+        
+        <form class="form-horizontal" role="form">
+            <div class="form-group  well-sm ">
+                <label for="name" class="col-lg-pull-4 pull-left control-label">Template Name</label>
+                <div class="col-lg-8 pull-right">
+                    <input type="text" class="form-control" id="name" data-ng-model="template.name" />
+                </div>
+            </div>
+
+            <div class="form-group  well-sm">
+                <label for="inputDatepicker" class="col-lg-pull-4 pull-left control-label" style="margin-right: 6px;">From Date</label>
+                <div class="col-lg-8 pull-right">
+                    <input id="inputDatepicker" class="input-sm" type="text" ng-model="datepicker.fromDate" data-date-format="mm/dd/yyyy" bs-datepicker>
+                    <button type="button" class="btn" data-toggle="datepicker"><i class="glyphicon glyphicon-calendar"></i></button>
+                </div>
+            </div>
+
+            <div class="form-group  well-sm">
+                <label for="inputDatepicker1" class="col-sm-pull-4 pull-left control-label" style="margin-right: 6px;">To Date</label>
+                <div class="col-lg-8 pull-right">
+                    <input id="inputDatepicker1" class="input-sm" type="text" data-ng-model="datepicker.toDate" data-date-format="mm/dd/yyyy" bs-datepicker>
+                    <button type="button" class="btn" data-toggle="datepicker"><i class="glyphicon glyphicon-calendar glyphicon-nonescaped"></i></button>
+                </div>
+               
+            </div>
+            
+
+        </form>
+        <div class="btn btn-primary" data-ng-click="alert()">Add new predicate condition</div>
+        <a ng-click="alert()">Click me</a>
+    </div>
+</div>

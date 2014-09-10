@@ -1,0 +1,29 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@using Microsoft.AspNet.Identity
+    @if (Request.IsAuthenticated)
+    {
+        using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <ul class="nav navbar-nav navbar-fixed-top">
+                <li class="pull-left"  >@Html.ActionLink("Back to Portal", "Index", "Portal")</li>
+                @if (User.IsInRole("Admin"))
+                {
+                    <li>@Html.ActionLink("Users", "Index", "Account")</li>
+                    <li>@Html.ActionLink("Organizations", "Index", "Organization")</li>
+                    <li>@Html.ActionLink("Clients", "Index", "Client")</li>
+                }           
+                <li class="pull-right"><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+
+            </ul>
+        }
+    }
+    else
+    {
+        <ul class="nav navbar-nav navbar-right">
+            <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        </ul>
+    }

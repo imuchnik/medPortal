@@ -1,0 +1,195 @@
+﻿<div data-ng-controller="triggerWizardController">
+    <div>
+        <div data-ng-hide="wizard">
+            <div>
+                <label>Results Count: <span>{{triggerResults.length}}</span></label>
+
+                <div kendo-grid k-options="gridOptions" k-data-source="triggerResults"></div>
+                <button class="pull-right btn btn-primary" data-ng-click="saveTriggerResults()">Save Report   </button>
+                <button class="pull-right btn btn-primary" data-ng-click="cancel()">Discard Results</button>
+                <button class="pull-right btn btn-primary" data-ng-click="goBack()">Adjust Parameters</button>
+            </div>
+        </div>
+        <div data-ng-show="wizard">
+            <div ng-switch on="selection">
+                <div class="animate-switch" ng-switch-default>
+                    <div class="row clearfix">
+                        <div class="col-md-12">
+                            <form class="form-horizontal" role="form">
+                                <div class="form-group well-sm">
+                                    <label for="triggerTemplateTypeSelect" class="col-lg-pull-4 pull-left control-label">Trigger Template Type</label>
+                                    <div class="col-lg-8  pull-right input-lg">
+                                        <select data-ng-model="params.selectedTemplate"
+                                                data-ng-change="setTemplateType(params.selectedTemplate)"
+                                                id="triggerTemplateTypeSelect">
+                                            <option data-ng-repeat="type in templateTypes" data-ng-bind="type.name" value="{{type.type}}"></option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="form-group  well-sm ">
+                                    <label for="name" class="col-lg-pull-4 pull-left control-label">Trigger Name</label>
+                                    <div class="col-lg-8 pull-right">
+                                        <input type="text" class="form-control" id="name" data-ng-model="params.triggerName" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group  well-sm">
+                                    <label for="inputDatepicker" class="col-lg-pull-4 pull-left control-label" style="margin-right: 6px;">From Date</label>
+                                    <div class="col-lg-8 pull-right">
+                                        <input id="inputDatepicker" class="input-sm" type="text" ng-model="datepicker.fromDate" data-date-format="mm/dd/yyyy" bs-datepicker>
+                                        <button type="button" class="btn" data-toggle="datepicker"><i class="glyphicon glyphicon-th-list"></i></button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group  well-sm">
+                                    <label for="inputDatepicker1" class="col-sm-pull-4 pull-left control-label" style="margin-right: 6px;">To Date</label>
+                                    <div class="col-lg-8 pull-right">
+                                        <input id="inputDatepicker1" class="input-sm" type="text" data-ng-model="datepicker.toDate" data-date-format="mm/dd/yyyy" bs-datepicker>
+                                        <button type="button" class="btn" data-toggle="datepicker"><i class=" glyphicon glyphicon-th-list"></i></button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group  well-sm ">
+                                    <label for="comments" class="col-lg-pull-4 pull-left control-label">Comments</label>
+                                    <div class="col-lg-8  pull-right">
+                                        <textarea rows="5" class="form-control" id="comments" data-ng-model="params.comments" />
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="animate-switch" ng-switch-when="2">
+                    <div class="form-horizontal">
+                        <h4>Summary</h4>
+                        <blockquote>
+                            <div class="well-sm">
+                                <h5 data-ng-bind="getTemplateName(params.selectedTemplate)"></h5>
+                                <h5><i>Effective dates: </i> {{datepicker.fromDate | date:'shortDate'}} through {{datepicker.toDate| date:'shortDate'}}</h5>
+                                <h5><i>Client Name: </i>{{currentClient.ClientName}}</h5>
+                                <h5 data-ng-show="params.triggerName.length>0"><i>Name: </i> {{params.triggerName}}</h5>
+                            </div>
+                        </blockquote>
+                        <div data-ng-if="selectedTemplate==='ChronicDrugs'">
+                            <div class="form-group ">
+                                <label for="chronicRx+selectedTemplate" class="col-lg-pull-6 pull-left control-label">Number Of Chronic Drugs</label>
+                                <div class="col-lg-6">
+                                    <select id="chronicRx+selectedTemplate" data-ng-model="params.chronicDrugs" data-ng-options="c for c in generateNumbersArray(2,6)"></select>
+                                </div>
+                            </div>
+                            <div class="form-group  well-sm">
+                                <label for="inputDatepicker3" class="col-sm-pull-4 pull-left control-label" style="margin-right: 6px;">Display To Date</label>
+                                <div class="col-lg-8 pull-right">
+                                    <input id="inputDatepicker3" class="input-sm" type="text" data-ng-model="datepicker.displayFromDate" data-date-format="mm/dd/yyyy" bs-datepicker>
+                                    <button type="button" class="btn" data-toggle="datepicker"><i class=" glyphicon glyphicon-th-list"></i></button>
+                                </div>
+                            </div>
+                            <div class="form-group  well-sm">
+                                <label for="inputDatepicker4" class="col-sm-pull-4 pull-left control-label" style="margin-right: 6px;">Display From Date</label>
+                                <div class="col-lg-8 pull-right">
+                                    <input id="inputDatepicker4" class="input-sm" type="text" data-ng-model="datepicker.displayToDate" data-date-format="mm/dd/yyyy" bs-datepicker>
+                                    <button type="button" class="btn" data-toggle="datepicker"><i class=" glyphicon glyphicon-th-list"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div data-ng-if="selectedTemplate==='GenericTrigger'">
+
+                            <div class="form-group ">
+                                <label for="dollarAmount" class="col-lg-pull-6 pull-left control-label">Threshhold Dollar Amount</label>
+                                <div class="col-lg-6">
+                                    <input type="text" class="form-control" id="dollarAmount" data-ng-model="params.dollarAmount" />
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <label for="pharm+selectedTemplate" class="col-lg-pull-6 pull-left control-label">Number Of Pharmacies</label>
+                                <div class="col-lg-6">
+                                    <select id="pharm+selectedTemplate" data-ng-model="params.numOfPharmacies" data-ng-options="c for c in generateNumbersArray(2,6)"></select>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group ">
+                                <label for="rx+selectedTemplate" class="col-lg-pull-6 pull-left control-label">Number Of Drugs</label>
+                                <div class="col-lg-6">
+                                    <select id="rx+selectedTemplate" data-ng-model="params.numOfUniqueDrugs" data-ng-options="c for c in generateNumbersArray(3,20)"></select>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group ">
+                                <label for="num+selectedTemplate" class="col-lg-pull-6 pull-left control-label">Number Of prescribers</label>
+                                <div class="col-lg-6">
+                                    <select id="num+selectedTemplate" data-ng-model="params.numOfUniquePrescribers" data-ng-options="c for c in generateNumbersArray(2,10)"></select>
+                                </div>
+                            </div>
+                        </div>
+
+                       
+
+                        
+                        <!--                        <button class="btn btn-sm btn-sm pull-right" id="addReference" data-ng-click="trigger.addReference=true;">-->
+                        <!--                            + Add a Refference-->
+                        <!--                        </button>-->
+                        <!--                        <div data-ng-show="trigger.addReference">-->
+                        <!---->
+                        <!--                            <h4><strong>Manage References</strong></h4>-->
+                        <!--                            <span class="pull-right">-->
+                        <!--                                <strong>Search</strong>-->
+                        <!--                                <input type="text" class="input-medium search-query" data-ng-model="searchReferences">-->
+                        <!--                                <i class="glyphicon glyphicon-search"></i>-->
+                        <!--                                $1$                                        //TODO://should you be able to add references here?#1#-->
+                        <!---->
+                        <!--                            </span>-->
+                        <!--                            <div class="well-sm">-->
+                        <!--                                <table id="referenceTable" class="table table-striped table-hover">-->
+                        <!--                                    <thead>-->
+                        <!--                                        <tr>-->
+                        <!--                                            <td>ID</td>-->
+                        <!--                                            <td>Clinical Category</td>-->
+                        <!--                                            <td>Title</td>-->
+                        <!--                                            <td>Year</td>-->
+                        <!--                                            <td>Pubmed Id</td>-->
+                        <!--                                            <td></td>-->
+                        <!---->
+                        <!--                                        </tr>-->
+                        <!--                                    </thead>-->
+                        <!--                                    <tbody>-->
+                        <!--                                        <tr data-ng-repeat="reference in references | filter:searchReferences">-->
+                        <!--                                            <td data-ng-bind="reference.id"></td>-->
+                        <!--                                            <td data-ng-bind="reference.clinicalCategory"></td>-->
+                        <!--                                            <td data-ng-bind="reference.title"></td>-->
+                        <!--                                            <td data-ng-bind="reference.year"></td>-->
+                        <!--                                            <td data-ng-bind="reference.pubmedId"></td>-->
+                        <!--                                            <td>-->
+                        <!--                                                <a href="#"><i class="glyphicon glyphicon-eye-open"></i></a>-->
+                        <!--                                            </td>-->
+                        <!--                                            <td>-->
+                        <!--                                                <a href="#"><i class="glyphicon glyphicon-plus"></i></a>-->
+                        <!--                                            </td>-->
+                        <!--                                        </tr>-->
+                        <!--                                    </tbody>-->
+                        <!--                                </table>-->
+                        <!--                            </div>-->
+                        <!--                            <button class="btn btn-sm btn-sm pull-right" id="addReference" data-ng-click="trigger.addReference=false;">-->
+                        <!--                                Dissmiss-->
+                        <!--                            </button>-->
+                        <!--                        </div>-->
+
+                    </div>
+                </div>
+                <div>
+                    <div class="row clearfix">
+                        <span class="col-md-12 column">
+                            <button type="button" class="btn btn-primary pull-left" data-ng-hide="selection===1" data-ng-click="selection=selection-1">Back</button>
+                            <button type="button" class="btn btn-primary pull-right" data-ng-click="selection=selection+1" data-ng-hide="selection===2">Next</button>
+                            <button type="button" class="btn btn-primary pull-right" data-ng-if="selection===2" data-ng-disabled="currentClient.ClientName === ' '" data-ng-click="runTrigger()">Finish</button>
+                            <button type="button" class="btn btn-primary pull-right" data-ng-click="cancel()">Cancel</button>
+                        </span>
+                    </div>
+                </div>
+            </div><!--  /.modal-content #1#-->
+        </div>
+    </div>
+</div>

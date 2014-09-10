@@ -1,0 +1,88 @@
+﻿<div data-ng-controller="triggerReportController">
+<div class="control-group">
+    <span class="form-group"><label>Report count: {{triggerReport.length}}</label></span>
+    <span class="pull-right"><a href="javascript:void(0)" data-toggle-collapsibles data-element-selector=".top-collapsible-group">Expand All</a></span>
+</div>
+   
+    
+<div class="table">
+    <table class="table table-bordered table-responsive table-striped table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Patient</th>
+                <th>DOB</th>
+                <th>Sex</th>
+                <th>Ralationship Code</th>
+                <th>Pharmacy #</th>
+                <th>Total $</th>
+                <th>Prescriber #</th>
+                <th>Rx#</th>
+            </tr>
+        </thead>
+        <tbody data-ng-repeat="row in triggerReport">
+            <tr>
+                <td><a class="k-icon k-plus" data-toggle="collapse" data-toggle-claim-detail detail-target="{{row.Value[0].claim.PatientId.split('.').join('').split(')').join('').split('(').join('').split(' ').join('').split(',').join('')}}"></a></td>
+                <td>
+                    <div>
+                        {{row.Key}}
+                        <img src="/Content/images/reviewer.png" data-ng-show="row.Value[0].mcaCreated"></img>
+                        <i class="glyphicon glyphicon-ok" data-ng-show="row.Value[0].Reviewed"></i>
+                    </div>
+                    <div data-ng-include=" '/partials/action-links.html' "></div>
+
+                </td>
+                <td>{{row.Value[0].claim.DateOfBirth |date:'MM/dd/yyyy'}}</td>
+                <td>{{row.Value[0].claim.SexCode}}</td>
+                <td>{{row.Value[0].claim.RelationshipCode}}</td>
+                <td>{{row.Value[0].claim.PharmacyCount}}</td>
+                <td>{{row.Value[0].claim.TotalDollars}}</td>
+                <td>{{row.Value[0].claim.PrescriberCount}}</td>
+                <td>{{row.Value[0].claim.RxCount}}</td>
+            </tr>
+           
+            <tr id="{{row.Value[0].claim.PatientId.split('.').join('').split('(').join('').split(')').join('').split(',').join('').split(' ').join('')}}" class="collapse top-collapsible-group">
+
+                <td colspan="10">
+                    Claims
+                    <div>
+                        <table class="table table-bordered table-responsive table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Pharmacy Name</th>
+                                    <th>Refill Code</th>
+                                    <th>Prescriber Name</th>
+                                    <th>Date Filled</th>
+                                    <th>GPI Description</th>
+                                    <th>Metric Quantity</th>
+                                    <th>Days Supply</th>
+                                    <th>Paid Amount</th>
+                                    <th>Copay</th>
+                                </tr>
+                            </thead>
+                            <tr data-ng-repeat="cl in row.Value">
+                                <td></td>
+                                <td>{{cl.claim.PharmacyName}}</td>
+                                <td>{{cl.claim.RefillCode}}</td>
+                                <td>{{cl.claim.PrescriberLastName}}</td>
+                                <td>{{cl.claim.DateFilled}}</td>
+                                <td>{{cl.claim.GPIDescription}}</td>
+                                <td>{{cl.claim.MetricQuantity}}</td>
+                                <td>{{cl.claim.DaysSupply}}</td>
+                                <td>{{cl.claim.PaidAmt}}</td>
+                                <td>{{cl.claim.Copay}}</td>
+
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+ 
+        </tbody>
+    </table>
+
+    <!--    <div class="table" kendo-grid k-options="gridOptions" k-data-source="triggerReport" k-on-save-changes="saveChanges(kendoEvent)">-->
+    <!--    </div>-->
+</div>
+</div>

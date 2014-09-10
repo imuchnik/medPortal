@@ -1,0 +1,20 @@
+﻿<div class="list-tools">
+
+    <div class="list-tool-actions">
+
+
+        <span>|</span>
+
+        <button type="button" class="btn btn-link" data-ng-click="markReviewed( row.Value[0].claim.PatientId, row.Value[0].ReportId, row.Value[0])" data-ng-disabled="row.Value[0].Reviewed">
+            Mark Reviewed
+        </button>
+
+
+        <span>|</span>
+
+        <button type="button" class="btn btn-link" data-ng-click="showDetails(row); " data-ng-hide="row.Value[0].mcaCreated">Create MCA</button>
+        <button type="button" class="btn btn-link" data-ng-click="showDetails(row); " data-ng-show="row.Value[0].mcaCreated">View MCA</button>
+
+
+    </div>
+</div>

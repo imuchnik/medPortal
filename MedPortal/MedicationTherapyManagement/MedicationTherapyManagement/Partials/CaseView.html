@@ -1,0 +1,203 @@
+﻿<div data-ng-controller="caseViewController">
+
+    <div class=" container">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+
+                <button type="button" class="btn btn-lg btn-primary" data-ng-show="case.Status==='Assigned-Pending Acceptance' && isUserInRole('Provider')" data-ng-click="updateCaseStatus('In Progress')">Accept Case</button>
+                <button type="button" class="btn btn-lg btn-primary" data-ng-show="case.Status==='Assigned-Pending Acceptance' && isUserInRole('Provider')" data-ng-click="updateCaseStatus('Declined')">Decline</button>
+                <button type="button" class="btn btn-lg btn-primary" data-ng-show="case.Status!=='Assigned-Pending Acceptance' || isUserInRole('Coordinator')" data-ng-click="closeCase()">Close</button>
+                <button type="button" class="btn btn-lg btn-primary" data-ng-show="case.Status!=='Assigned-Pending Acceptance' && isUserInRole('Provider')" data-ng-click="updateCaseStatus('Completed')">Mark Complete</button>
+                <div class="row clearfix">
+                    <div class="col-md-8 column">
+                        <blockquote class="well well-lg ">
+
+                            <div><h2>Patient Info</h2></div>
+
+                            <div>
+                                <span>
+                                    <label>Patient:</label>
+                                    <label data-ng-bind="case.Patient"></label>
+                                </span>
+                            </div>
+                            <div>
+                                <span>
+                                    <label>Date of Birth:</label>
+                                    <label data-ng-bind="case.DOB|date:short"></label>
+                                </span>
+                            </div>
+                            <div>
+                                <span>
+                                    <label>Patient Id:</label>
+                                    <label data-ng-bind="case.PatientId"></label>
+                                </span>
+                            </div>
+                            <div>
+                                <span>
+                                    <label>Sex:</label>
+                                    <label data-ng-bind="case.SexCode"></label>
+                                </span>
+                            </div>
+                            <div>
+                                <span>
+                                    <label>Status:</label>
+                                    <label data-ng-bind="case.Status"></label>
+                                </span>
+                            </div>
+                            <span data-ng-show="successMessage" class="label label-success">{{successMessage}}   <span data-ng-show="successMessage"><button data-ng-show="successMessage" class="btn" data-ng-click="successMessage=null">Dismiss MessageS</button></span></span>
+
+                            <form name="providerAssigned" data-ng-hide="case.Status!=='UnAssigned' || isUserInRole('Provider')">
+
+
+
+                                <div class=" col-md-push-6">
+                                    <label>Assign to Provider</label>
+
+                                    <select name="providers" class="input-sm" data-ng-model="case.AssignedProvider" ng-options="c.LastName+','+c.FirstName for c in providers">
+                                        <option value="">-- choose provider --</option>
+                                    </select>
+                                    <button type="button" class="btn btn-sm btn-default " data-ng-show="isUserInRole('Coordinator') &&  providerAssigned.providers.$dirty" data-ng-click="assignProvider()">
+                                        Assign Provider
+                                    </button>
+
+                                </div>
+
+                            </form>
+
+
+
+                            <div data-ng-show="case.Status!=='UnAssigned' && isUserInRole('Coordinator')" class=" col-md-push-6">
+                                <label>Assigned Provider: </label><span class="well-sm text-info">{{assignedProvider.LastName}}, {{ assignedProvider.FirstName}}</span>
+
+                            </div>
+
+                            <div>
+                                <div class="well well-sm">
+                                    <h5>Contact Info</h5>
+                                    <span>
+                                        <label>Phone:</label>
+                                    </span>
+                                    <div>
+                                        <span>
+                                            <label>Address:</label>
+
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span>
+                                            <label>Email</label>
+
+                                        </span>
+                                    </div>
+                                    <button class="pull-right btn btn-default">Edit Contact Info</button>
+
+                                </div>
+                            </div>
+
+
+                        </blockquote>
+
+
+                        <!-- Tab panes -->
+                        <div class=" well well-lg">
+                            <tabset justified="true">
+                                <tab heading="Provider Notes">
+                                    <p>Provider Notes</p>
+                                    <ul>
+                                        <li data-ng-repeat="note in notes">
+                                            <p data-ng-bind="note.NoteText"></p>
+                                            <h6 class="col-lg-pull-2" data-ng-bind="note.CreateTime"></h6>
+                                        </li>
+                                    </ul>
+                                </tab>
+                                <tab heading="Messages"><p>Messages</p></tab>
+                                <tab heading="References"><p>Refreneces</p></tab>
+                                <tab heading="Billing"><p>Billing</p></tab>
+                            </tabset>
+                        </div>
+                    </div>
+                    <div class="col-md-4 column">
+                        <blockquote class="well well-lg ">
+                            <div>
+                                <div><h4>Problem List</h4></div>
+
+                                <div><textarea disabled="disabled" cols="50" rows="7">{{case.ProblemList}}</textarea></div>
+
+                            </div>
+
+                            <div>
+                                <div><h4>Recommendation List:</h4></div>
+                                <div><textarea disabled="disabled" cols="50" rows="7">{{case.RecomendationList}}</textarea></div>
+
+                            </div>
+                        </blockquote>
+
+                        <textarea data-ng-model="noteText" cols="55" rows="5"></textarea>
+
+                        <button type="button" class="btn btn-primary pull-right" data-ng-click="addNote()">Add New Note</button>
+
+                    </div>
+
+                </div>
+                <table class="table table-condensed table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Pharmacy Name</th>
+                            <th>Refill Code</th>
+                            <th>Prescriber Name</th>
+                            <th>Date Filled</th>
+                            <th>GPI Description</th>
+                            <th>Metric Quantity</th>
+                            <th>Days Supply</th>
+                            <th>Paid Amount</th>
+                            <th>Copay</th>
+                        </tr>
+                    </thead>
+
+                    <tr data-ng-repeat="cl in caseClaims">
+                        <td></td>
+                        <td>{{cl.claim.PharmacyName}}</td>
+                        <td>{{cl.claim.RefillCode}}</td>
+                        <td>{{cl.claim.PrescriberLastName}}</td>
+                        <td>{{cl.claim.DateFilled}}</td>
+                        <td>{{cl.claim.GPIDescription}}</td>
+                        <td>{{cl.claim.MetricQuantity}}</td>
+                        <td>{{cl.claim.DaysSupply}}</td>
+                        <td>{{cl.claim.PaidAmt}}</td>
+                        <td>{{cl.claim.Copay}}</td>
+
+                    </tr>
+
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="declineCaseModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Decline MCA Case</h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <label></label>
+                        <textarea name cols="" rows=""></textarea>
+                        
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-ng-click="deleteCaseConfirmed(case.id)" data-dismiss="modal">OK</button>
+                    <button class="btn btn-warning" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+</div>

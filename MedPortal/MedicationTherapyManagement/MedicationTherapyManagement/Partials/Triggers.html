@@ -1,0 +1,49 @@
+﻿<div data-ng-controller="triggersController">
+    <label data-ng-show="currentClient.ClientName==' '">No Trigger reports found</label>
+
+    <div class="panel panel-default" data-ng-show="currentClient.ClientName!=' '">
+        <span>
+            <strong>Trigger Reports</strong>
+        </span>
+        <span class="pull-right">
+            <input type="text" class="input-medium search-query" data-ng-model="searchText">
+            <i class="glyphicon glyphicon-search"></i>
+
+            <span class="btn btn-sm">
+                <a href="#/newTriggerReport">+ Add New Trigger</a>
+            </span>
+        </span>
+
+        <table id="triggerTable" class="table table-striped table-responsive table-hover">
+            <thead>
+                <tr>
+                   <td><strong>Client</strong></td>
+                    <td><strong>Author</strong></td>
+                    <td><strong>Created</strong></td>
+                    <td><strong>Count</strong></td>
+                    <td><strong>Parameters</strong></td>
+                    <td><strong>Cases</strong></td>
+                    <td><strong>Actions</strong></td>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr data-ng-repeat="entry in triggers | filter:currentClient.ClientName:strict|filter:searchText | orderBy:'DateCreated':true ">
+                    <td data-ng-bind="entry.trigger.ClientName"></td>
+                    <td data-ng-bind="entry.trigger.Author"></td>
+                    <td data-ng-bind="entry.trigger.DateCreated| date:'short'"></td>
+                    <td data-ng-bind="entry.trigger.claimsCount"></td>
+                    <td>{{parseParams(entry.trigger.GeneratedParameters)}}</td>
+                    <td data-ng-bind="entry.count"></td>
+                      <td>
+                        <a href="#/triggerReport/{{entry.trigger.ReportId}}"><i class="glyphicon glyphicon-list-alt"></i></a>
+                        <span style="{width:20px}"></span><a href="" data-ng-hide="entry.count>0" data-ng-click="deleteTriggerReport(entry.trigger.ReportId)">
+                            <i class="glyphicon glyphicon-remove"></i>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

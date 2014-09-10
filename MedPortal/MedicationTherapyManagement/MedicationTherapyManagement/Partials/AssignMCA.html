@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Assign Case</title>
+    </head>
+<body class="mca-dialog">
+    
+    <div class="dialog-contents">
+    
+        <h3 data-ng-hide="case.id">Assign MCA (Case)</h3>
+        <h3 data-ng-show="case.id">View MCA (Case)</h3>
+        <div class="well">
+            <div class="col-md-push-6"><label>Patient Details: </label><span class="well-sm text-info" data-ng-bind="mcaData.Key" /></div>
+            <div class="col-md-pull-6">
+                <label>DOB</label>
+                <span data-ng-model="dob" class="well-sm text-info" data-ng-bind="mcaData.Value[0].claim.DateOfBirth | date:'MM/dd/yyyy'"></span>
+                <label>Sex</label>
+                <span data-ng-model="sex" class="well-sm text-info" data-ng-bind="mcaData.Value[0].claim.SexCode "></span>
+                <label>Relationship Code</label>
+                <span data-ng-model="relationCode" class="well-sm text-info" data-ng-bind="mcaData.Value[0].claim.RelationshipCode "></span>
+               
+                <div data-ng-hide="case.Status.length>1 || assignedCaseProvider " class="col-md-push-6">
+                    <label>Assign to Provider</label>
+                    {{case.Status.length>1}}
+                    <select class="input-sm" data-ng-model="assignedProvider" ng-options="c.LastName+','+c.FirstName for c in providers">
+                        <option value="">-- choose provider --</option>
+                    </select><br>
+                </div>
+                <div data-ng-show="case.id">
+                    <label>Status:</label>
+                    <span>{{case.Status}}</span>
+                </div>
+           
+                <div data-ng-show="assignedCaseProvider" class="col-md-push-6">
+                    <label>Assigned Provider: </label><span class="well-sm text-info">{{assignedCaseProvider[0].LastName}}, {{ assignedCaseProvider[0].FirstName}}</span>
+
+                </div>
+            </div>
+        </div>
+        <div class="pull-left">
+            <label>Problem List:</label>
+            <textarea data-ng-disabled="assignedCaseProvider.length>0" name="problemList" data-ng-model="problemList" cols="110" rows="5"></textarea>
+        </div>
+        <div>
+            <label>Recomendation List:</label>
+            <textarea data-ng-model="recomendationList" data-ng-disabled="assignedCaseProvider.length>0" name="recomendationList" cols="110" rows="5"></textarea>
+        </div>
+
+        //TODO: Discuss NDC and levels
+
+        <table id="claimsTables" class="table table-striped table-responsive table-hover">
+            <thead>
+                <tr>
+                    <td><strong>Date Filled</strong></td>
+                    <td><strong>Pharmacy</strong></td>
+                    <td><strong>Generic Name</strong></td>
+                    <td><strong>Qty</strong></td>
+                    <td><strong>Refill</strong></td>
+                    <td><strong>Prescriber</strong></td>
+                    <th><strong>Supply</strong> </th>
+                    <th><strong>Amount</strong> </th>
+                    <th><strONG>Copay</strONG></th>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr data-ng-repeat="entry in mcaData.Value">
+                    <td data-ng-bind="entry.claim.DateFilled"></td>
+                    <td data-ng-bind="entry.claim.PharmacyName  "></td>
+                    <td data-ng-bind="entry.claim.GPIDescription"></td>
+                    <td data-ng-bind="entry.claim.MetricQuantity"></td>
+                    <td data-ng-bind="entry.claims.RefillCode"></td>
+                    <td data-ng-bind="entry.claim.PrescriberLastName"></td>
+                    <td data-ng-bind="entry.claim.DaysSupply"></td>
+                    <td data-ng-bind="entry.claim.PaidAmt"></td>
+                    <td data-ng-bind="entry.claim.Copay"></td>
+                   
+
+                </tr>
+            </tbody>
+        </table>
+        <div data-ng-hide="assignedCaseProvider">
+            <button class="btn btn-primary" type="button" data-ng-click="saveMca()">Save</button>
+        </div>
+    </div>
+</body>
+</html>

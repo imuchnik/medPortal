@@ -1,0 +1,96 @@
+﻿body {
+    padding-bottom: 20px;
+    padding-top: 50px;
+}
+
+/* Set padding to keep content from hitting the edges */
+
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+
+input,
+select,
+textarea { max-width: 1024px; }
+
+/* styles for validation helpers */
+
+.field-validation-error { color: #b94a48; }
+
+.field-validation-valid { display: none; }
+
+input.input-validation-error { border: 1px solid #b94a48; }
+
+input[type="checkbox"].input-validation-error { border: 0 none; }
+
+.validation-summary-errors { color: #b94a48; }
+
+.validation-summary-valid { display: none; }
+
+.animate-switch-container {
+    background: white;
+    border: 1px solid black;
+    height: 40px;
+    overflow: hidden;
+    position: relative;
+}
+
+.animate-switch { padding: 10px; }
+
+.animate-switch.ng-animate {
+    -moz-webkit-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    -webkit-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    bottom: 0;
+    left: 0;
+    /*transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;*/
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.animate-switch.ng-leave.ng-leave-active,
+.animate-switch.ng-enter { top: -50px; }
+
+.animate-switch.ng-leave,
+.animate-switch.ng-enter.ng-enter-active { top: 0; }
+
+#triggerTemplateTypeSelect {
+    height: 25px;
+    margin-top: 5px;
+}
+
+.claims {
+    -webkit-overflow-scrolling: auto;
+    height: 100%;
+}
+
+.mca-dialog {
+    left: 150px;
+    position: relative;
+    top: 100px;
+    width: 850px
+}
+
+.glyphicon-nonescaped.glyphicon-calendar:before { content: "\d83d\dcc5"; }
+
+.list-tool-actions a {
+    cursor: pointer;
+    margin-top: 3px;
+}
+
+
+
+
+.list-tool-actions { visibility: hidden; }
+
+td:hover .list-tool-actions {
+    background-color: lightgray;
+    visibility: visible;
+}
+a > i {
+margin-right:20px;
+
+}
